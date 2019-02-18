@@ -1,29 +1,21 @@
 <?xml version="1.0"?>
 <launch>
 
-    <!-- Map server -->
-    <arg name="map_file" default="$(find udacity_bot)/maps/jackal_race.yaml"/>
-    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+  <!-- Map server -->
+  <arg name="map_file" default="$(find udacity_bot)/maps/jackal_race.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
-    <!-- Localization-->
-    <node pkg="amcl" type="amcl" name="amcl" output="screen">
+  <!-- Localization-->
+  <node pkg="amcl" type="amcl" name="amcl" output="screen">
     <remap from="scan" to="udacity_bot/laser/scan"/>
     <param name="odom_frame_id" value="odom"/>
     <param name="odom_model_type" value="diff-corrected"/>
     <param name="base_frame_id" value="robot_footprint"/>
     <param name="global_frame_id" value="map"/>
+  </node>
 
-    <!--New parameters added for tuning-->
-    <param name="min_particles" value="10"/>
-    <param name="max_particles" value="100"/>
-    <param name="initial_pose_a" value="0.062"/>
-    <param name="update_min_d" value="0.01"/>
-    <param name="update_min_a" value="0.01"/>
-
-    </node>
-
-    <!-- Move base -->
-    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+<!-- Move base -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <rosparam file="$(find udacity_bot)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
     <rosparam file="$(find udacity_bot)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
     <rosparam file="$(find udacity_bot)/config/local_costmap_params.yaml" command="load" />
